@@ -133,6 +133,8 @@
     <ClCompile Include="MinerOwnedStates.cpp" />
     <ClCompile Include="MinersWife.cpp" />
     <ClCompile Include="MinersWifeOwnedStates.cpp" />
+    <ClCompile Include="Boozer.cpp" />
+    <ClCompile Include="BoozerOwnedStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\2D\SVector2D.h" />
@@ -154,6 +156,8 @@
     <ClInclude Include="MinerOwnedStates.h" />
     <ClInclude Include="MinersWife.h" />
     <ClInclude Include="MinersWifeOwnedStates.h" />
+    <ClInclude Include="Boozer.h" />
+    <ClInclude Include="BoozerOwnedStates.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
