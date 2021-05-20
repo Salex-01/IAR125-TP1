@@ -14,39 +14,6 @@
 class Boozer;
 
 
-
-//------------------------------------------------------------------------
-//
-
-//------------------------------------------------------------------------
-class BoozerGlobalState : public State<Boozer>
-{  
-private:
-  
-  BoozerGlobalState(){}
-
-  //copy ctor and assignment should be private
-  BoozerGlobalState(const BoozerGlobalState&);
-  BoozerGlobalState& operator=(const BoozerGlobalState&);
- 
-public:
-
-  //this is a singleton
-  static BoozerGlobalState* Instance();
-  
-  virtual void Enter(Boozer* boozer){}
-
-  virtual void Execute(Boozer* boozer);
-
-  virtual void Exit(Boozer* boozer){}
-
-  virtual bool OnMessage(Boozer* boozer, const Telegram& msg);
-};
-
-
-//------------------------------------------------------------------------
-//
-
 //------------------------------------------------------------------------
 class Drinking : public State<Boozer>
 {

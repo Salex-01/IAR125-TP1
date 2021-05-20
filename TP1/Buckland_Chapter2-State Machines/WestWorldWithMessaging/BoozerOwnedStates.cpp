@@ -16,57 +16,6 @@ extern std::ofstream os;
 #define cout os
 #endif
 
-//-----------------------------------------------------------------------Global state
-
-BoozerGlobalState* BoozerGlobalState::Instance()
-{
-  static BoozerGlobalState instance;
-
-  return &instance;
-}
-
-
-void BoozerGlobalState::Execute(Boozer* boozer)
-{
-  //1 in 10 chance of needing the bathroom (provided she is not already
-  //in the bathroom)
-  //if ( (RandFloat() < 0.1) && 
-  //     !wife->GetFSM()->isInState(*VisitBathroom::Instance()) )
-  //{
-  //  wife->GetFSM()->ChangeState(VisitBathroom::Instance());
-  //}
-}
-
-bool BoozerGlobalState::OnMessage(Boozer* boozer, const Telegram& msg)
-{
-  SetTextColor(BACKGROUND_RED|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-  //
-  //
-  // TODO
-  //
-  //
-  switch(msg.Msg)
-  {
-  case Msg_HiHoneyImHome:
-   {
-       cout << "\nMessage handled by " << GetNameOfEntity(wife->ID()) << " at time: " 
-       << Clock->GetCurrentTime();
-
-     SetTextColor(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
-
-     cout << "\n" << GetNameOfEntity(wife->ID()) << 
-          ": Hi honey. Let me make you some of mah fine country stew";
-
-     wife->GetFSM()->ChangeState(CookStew::Instance());
-   }
-
-   return true;
-
-  }//end switch
-
-  return false;
-}
-
 //-------------------------------------------------------------------------DoHouseWork
 
 Drinking* Drinking::Instance()
@@ -79,40 +28,25 @@ Drinking* Drinking::Instance()
 
 void Drinking::Enter(Boozer* boozer)
 {
-    //
-    //
-    // TODO
-    //
-    //
-  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Time to do some more housework!";
+  SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Let's drink !";
 }
 
 
 void Drinking::Execute(Boozer* boozer)
 {
-    //
-    //
-    // TODO
-    //
-    //
-  switch(RandInt(0,2))
+  switch(RandInt(0,1))
   {
   case 0:
-
-    cout << "\n" << GetNameOfEntity(wife->ID()) << ": Moppin' the floor";
+      SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    cout << "\n" << GetNameOfEntity(boozer->ID()) << ": That hit the spot !";
 
     break;
 
   case 1:
-
-    cout << "\n" << GetNameOfEntity(wife->ID()) << ": Washin' the dishes";
-
-    break;
-
-  case 2:
-
-    cout << "\n" << GetNameOfEntity(wife->ID()) << ": Makin' the bed";
-
+    SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Am Drunk yey !";
+    boozer->GetFSM()->ChangeState(Drunk::Instance());
     break;
   }
 }
@@ -138,26 +72,59 @@ Drunk* Drunk::Instance()
 
 void Drunk::Enter(Boozer* boozer)
 {  
-  cout << "\n" << GetNameOfEntity(wife->ID()) << ": Walkin' to the can. Need to powda mah pretty li'lle nose"; 
+  SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": I see double !"; 
 }
 
 
 void Drunk::Execute(Boozer* boozer)
 {
-  cout << "\n" << GetNameOfEntity(wife->ID()) << ": Ahhhhhh! Sweet relief!";
-
-  wife->GetFSM()->RevertToPreviousState();
+  if (RandInt(0, 3) > 0) {
+      SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+      cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Bouah!";
+  } 
+  else {
+      SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+      cout << "\n" << GetNameOfEntity(boozer->ID()) << ": My head Hurt I drink to much !";
+      boozer->GetFSM()->ChangeState(Drinking::Instance());
+  }
 }
 
 void Drunk::Exit(Boozer* boozer)
 {
-  cout << "\n" << GetNameOfEntity(wife->ID()) << ": Leavin' the Jon";
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": buuh !";
 }
 
 
 bool Drunk::OnMessage(Boozer* boozer, const Telegram& msg)
 {
-  return false;
+    switch (msg.Msg)
+    {
+    case Msg_IsInSaloon:
+    {
+        cout << "\nMessage received by " << GetNameOfEntity(boozer->ID()) <<
+            " at time: " << Clock->GetCurrentTime();
+
+        SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+        cout << "\n" << GetNameOfEntity(boozer->ID()) << "Boozer Insult Bob";
+
+        //let hubby know the stew is ready
+        Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
+            boozer->ID(),
+            ent_Miner_Bob,
+            Msg_Fighting,
+            NO_ADDITIONAL_INFO);
+
+        boozer->SetFighting(true);
+        boozer->SetDrinking(false);
+        boozer->GetFSM()->ChangeState(Fighting::Instance());
+    }
+
+    return true;
+
+    }//end switch
+
+    return false;
 }
 
 
@@ -170,37 +137,26 @@ Fighting* Fighting::Instance()
   return &instance;
 }
 
-
 void Fighting::Enter(Boozer* boozer)
 {
-  //if not already cooking put the stew in the oven
-  if (!wife->Cooking())
-  {
-    cout << "\n" << GetNameOfEntity(wife->ID()) << ": Putting the stew in the oven";
-  
-    //send a delayed message myself so that I know when to take the stew
-    //out of the oven
-    Dispatch->DispatchMessage(1.5,                  //time delay
-                              wife->ID(),           //sender ID
-                              wife->ID(),           //receiver ID
-                              Msg_StewReady,        //msg
-                              NO_ADDITIONAL_INFO); 
+  SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
-    wife->SetCooking(true);
-  }
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Come here you stupid !";
 }
 
 
 void Fighting::Execute(Boozer* boozer)
 {
-  cout << "\n" << GetNameOfEntity(wife->ID()) << ": Fussin' over food";
+  SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+  
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": I 'm gonna hit you ! Yaah!";
 }
 
 void Fighting::Exit(Boozer* boozer)
 {
-  SetTextColor(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+  SetTextColor(FOREGROUND_BLUE |FOREGROUND_INTENSITY);
   
-  cout << "\n" << GetNameOfEntity(wife->ID()) << ": Puttin' the stew on the table";
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Ah it's hurt !";
 }
 
 
@@ -210,24 +166,24 @@ bool Fighting::OnMessage(Boozer* boozer, const Telegram& msg)
 
   switch(msg.Msg)
   {
-    case Msg_StewReady:
+    case Msg_Fighting:
     {
-      cout << "\nMessage received by " << GetNameOfEntity(wife->ID()) <<
+      cout << "\nMessage received by " << GetNameOfEntity(boozer->ID()) <<
            " at time: " << Clock->GetCurrentTime();
 
-      SetTextColor(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
-      cout << "\n" << GetNameOfEntity(wife->ID()) << ": StewReady! Lets eat";
+      SetTextColor(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+      cout << "\n" << GetNameOfEntity(boozer->ID()) << "boozer get hit by Bob and flee";
 
       //let hubby know the stew is ready
       Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
-                                wife->ID(),
+                                boozer->ID(),
                                 ent_Miner_Bob,
-                                Msg_StewReady,
+                                Msg_Fighting,
                                 NO_ADDITIONAL_INFO);
 
-      wife->SetCooking(false);
-
-      wife->GetFSM()->ChangeState(DoHouseWork::Instance());               
+      boozer->SetFighting(false);
+      boozer->SetDrinking(true);
+      boozer->GetFSM()->ChangeState(Drunk::Instance());               
     }
 
     return true;

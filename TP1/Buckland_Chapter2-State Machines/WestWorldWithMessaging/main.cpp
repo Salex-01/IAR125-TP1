@@ -8,6 +8,7 @@
 #include "MessageDispatcher.h"
 #include "misc/ConsoleUtils.h"
 #include "EntityNames.h"
+#include "Boozer.h"
 
 
 std::ofstream os;
@@ -28,15 +29,18 @@ int main()
   //create his wife
   MinersWife* Elsa = new MinersWife(ent_Elsa);
 
+  Boozer* boozer = new Boozer(ent_Boozer);
   //register them with the entity manager
   EntityMgr->RegisterEntity(Bob);
   EntityMgr->RegisterEntity(Elsa);
+  EntityMgr->RegisterEntity(boozer);
 
   //run Bob and Elsa through a few Update calls
   for (int i=0; i<30; ++i)
   { 
     Bob->Update();
     Elsa->Update();
+    boozer->Update();
 
     //dispatch any delayed messages
     Dispatch->DispatchDelayedMessages();
@@ -47,6 +51,7 @@ int main()
   //tidy up
   delete Bob;
   delete Elsa;
+  delete boozer;
 
   //wait for a keypress before exiting
   PressAnyKeyToContinue();

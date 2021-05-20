@@ -173,6 +173,28 @@ public:
 };
 
 
+class FightingMiner : public State<Miner>
+{
+private:
 
+	FightingMiner() {}
+
+	//copy ctor and assignment should be private
+	FightingMiner(const FightingMiner&);
+	FightingMiner& operator=(const FightingMiner&);
+
+public:
+
+	//this is a singleton
+	static FightingMiner* Instance();
+
+	virtual void Enter(Miner* miner);
+
+	virtual void Execute(Miner* miner);
+
+	virtual void Exit(Miner* miner);
+
+	virtual bool OnMessage(Miner* agent, const Telegram& msg);
+};
 
 #endif

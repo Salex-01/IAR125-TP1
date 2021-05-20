@@ -13,3 +13,4 @@ void Boozer::Update()
  
   m_pStateMachine->Update();
 }
+

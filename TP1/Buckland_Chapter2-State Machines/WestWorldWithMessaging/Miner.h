@@ -53,6 +53,8 @@ private:
   //the higher the value, the more tired the miner
   int                   m_iFatigue;
 
+  bool            m_bFighting;
+
 public:
 
   Miner(int id):m_Location(shack),
@@ -103,6 +105,9 @@ public:
 
   bool          Thirsty()const; 
   void          BuyAndDrinkAWhiskey(){m_iThirst = 0; m_iMoneyInBank-=2;}
+
+  bool          Fighting()const { return m_bFighting; }
+  void          SetFighting(bool val) { m_bFighting = val; }
 
 };
 

@@ -34,12 +34,14 @@ private:
 
   //is he presently drinking?
   bool            m_bDrinking;
+  bool            m_bFighting;
 
 
 public:
 
   Boozer(int id):m_Location(saloon),
-//                     m_bCooking(false),
+                     m_bDrinking(true),
+                     m_bFighting(false),
                      BaseGameEntity(id)
                                         
   {
@@ -47,8 +49,6 @@ public:
     m_pStateMachine = new StateMachine<Boozer>(this);
 
     m_pStateMachine->SetCurrentState(Drinking::Instance());
-
-    m_pStateMachine->SetGlobalState(BoozerGlobalState::Instance());
   }
 
   ~Boozer(){delete m_pStateMachine;}
@@ -68,6 +68,9 @@ public:
 
   bool          Drinking()const{return m_bDrinking;}
   void          SetDrinking(bool val){m_bDrinking = val;}
+  
+  bool          Fighting()const { return m_bFighting; }
+  void          SetFighting(bool val) { m_bFighting = val; }
    
 };
 
