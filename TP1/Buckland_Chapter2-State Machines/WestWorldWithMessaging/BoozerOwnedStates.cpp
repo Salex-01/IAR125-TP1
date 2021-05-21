@@ -16,7 +16,7 @@ extern std::ofstream os;
 #define cout os
 #endif
 
-//-------------------------------------------------------------------------DoHouseWork
+//-------------------------------------------------------------------------Drinking
 
 Drinking* Drinking::Instance()
 {
@@ -60,7 +60,7 @@ bool Drinking::OnMessage(Boozer* boozer, const Telegram& msg)
   return false;
 }
 
-//------------------------------------------------------------------------VisitBathroom
+//------------------------------------------------------------------------Drunk
 
 Drunk* Drunk::Instance()
 {
@@ -85,7 +85,7 @@ void Drunk::Execute(Boozer* boozer)
   } 
   else {
       SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-      cout << "\n" << GetNameOfEntity(boozer->ID()) << ": My head Hurt I drink to much !";
+      cout << "\n" << GetNameOfEntity(boozer->ID()) << ": My head hurts I drank to much !";
       boozer->GetFSM()->ChangeState(Drinking::Instance());
   }
 }
@@ -106,9 +106,9 @@ bool Drunk::OnMessage(Boozer* boozer, const Telegram& msg)
             " at time: " << Clock->GetCurrentTime();
 
         SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        cout << "\n" << GetNameOfEntity(boozer->ID()) << "Boozer Insult Bob";
+        cout << "\n" << GetNameOfEntity(boozer->ID()) << "Boozer insults Bob";
 
-        //let hubby know the stew is ready
+        //Start fight
         Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
             boozer->ID(),
             ent_Miner_Bob,
@@ -128,7 +128,7 @@ bool Drunk::OnMessage(Boozer* boozer, const Telegram& msg)
 }
 
 
-//------------------------------------------------------------------------CookStew
+//------------------------------------------------------------------------Fighting
 
 Fighting* Fighting::Instance()
 {
@@ -149,14 +149,14 @@ void Fighting::Execute(Boozer* boozer)
 {
   SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
   
-  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": I 'm gonna hit you ! Yaah!";
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": I'm gonna hit you ! Yaah!";
 }
 
 void Fighting::Exit(Boozer* boozer)
 {
   SetTextColor(FOREGROUND_BLUE |FOREGROUND_INTENSITY);
   
-  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Ah it's hurt !";
+  cout << "\n" << GetNameOfEntity(boozer->ID()) << ": Ah it hurts !";
 }
 
 
@@ -172,9 +172,9 @@ bool Fighting::OnMessage(Boozer* boozer, const Telegram& msg)
            " at time: " << Clock->GetCurrentTime();
 
       SetTextColor(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-      cout << "\n" << GetNameOfEntity(boozer->ID()) << "boozer get hit by Bob and flee";
+      cout << "\n" << GetNameOfEntity(boozer->ID()) << " gets hit by Bob and flees";
 
-      //let hubby know the stew is ready
+      //Start fight
       Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
                                 boozer->ID(),
                                 ent_Miner_Bob,

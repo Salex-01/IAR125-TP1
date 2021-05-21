@@ -2,11 +2,7 @@
 #define BOOZER_H
 //------------------------------------------------------------------------
 //
-//  Name: MinersWife.h
-//
-//  Desc: class to implement Miner Bob's wife.
-//
-//  Author: Mat Buckland 2003 (fup@ai-junkie.com)
+//  Based on MinersWife.h by Mat Buckland, 2003 (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
 
